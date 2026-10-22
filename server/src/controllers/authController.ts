@@ -1,0 +1,118 @@
+﻿import { Request, Response, NextFunction } from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { config } from '../config';
+import { COOKIE_OPTIONS, COOKIE_CLEAR_OPTIONS } from '../config/cookie';
+import { User } from '../models/User';
+import { CafeLayout } from '../models/CafeLayout';
+import { registerSchema, loginSchema } from '../validators/schemas';
+import { createError } from '../middleware/errorHandler';
+import { AuthRequest } from '../middleware/authenticate';
+
+export async function register(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const data = registerSchema.parse(req.body);
+
+    const existing = await User.findOne({ email: data.email });
+    if (existing) {
+      return next(createError('An account with this email already exists.', 409));
+    }
+
+    const passwordHash = await bcrypt.hash(data.password, config.bcryptRounds);
+
+    const user = await User.create({
+      name: data.name,
+      email: data.email,
+      passwordHash,
+    });
+
+    // Create starter cafÃ© layout
+    await CafeLayout.create({
+      userId: user._id,
+      roomTheme: 'cozy-brown',
+      inventory: [],
+      placements: [],
+    });
+
+    const token = jwt.sign({ userId: user._id.toString() }, config.jwtSecret, {
+      expiresIn: config.jwtExpiresIn as jwt.SignOptions['expiresIn'],
+    });
+
+    res.cookie('token', token, COOKIE_OPTIONS);
+    res.status(201).json({
+      success: true,
+      message: 'Account created successfully.',
+      data: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        beanBalance: user.beanBalance,
+        preferences: user.preferences,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function login(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const data = loginSchema.parse(req.body);
+
+    const user = await User.findOne({ email: data.email }).select('+passwordHash');
+    if (!user) {
+      return next(createError('Invalid email or password.', 401));
+    }
+
+    const isMatch = await bcrypt.compare(data.password, user.passwordHash);
+    if (!isMatch) {
+      return next(createError('Invalid email or password.', 401));
+    }
+
+    const token = jwt.sign({ userId: user._id.toString() }, config.jwtSecret, {
+      expiresIn: config.jwtExpiresIn as jwt.SignOptions['expiresIn'],
+    });
+
+    res.cookie('token', token, COOKIE_OPTIONS);
+    res.json({
+      success: true,
+      message: 'Logged in successfully.',
+      data: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        beanBalance: user.beanBalance,
+        preferences: user.preferences,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export function logout(_req: Request, res: Response): void {
+  res.clearCookie('token', COOKIE_CLEAR_OPTIONS);
+  res.json({ success: true, message: 'Logged out successfully.' });
+}
+
+export async function getMe(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) return next(createError('User not found.', 404));
+
+    res.json({
+      success: true,
+      data: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        beanBalance: user.beanBalance,
+        preferences: user.preferences,
+        createdAt: user.createdAt,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
