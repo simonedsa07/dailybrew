@@ -1,4 +1,4 @@
-﻿import { Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../middleware/authenticate';
 import { Budget } from '../models/Budget';
 import { SavingsGoal } from '../models/SavingsGoal';

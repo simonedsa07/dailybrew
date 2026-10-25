@@ -167,7 +167,7 @@ function getCafeItemIcon(item?: CafeCatalogItem) {
     wall_art_coffee: '🖼️',
     wall_clock: '🕰️',
     chalkboard: '🪧',
-    lamp_floor: '🛋️',
+    lamp_floor: '💡',
     lamp_fairy: '✨',
     lantern_paper: '🏮',
     companion_cat: '🐈',

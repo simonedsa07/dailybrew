@@ -1,4 +1,4 @@
-﻿import { useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { apiRequest } from './lib/api'
 import './AuthScreen.css'
 

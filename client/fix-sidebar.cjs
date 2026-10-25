@@ -1,4 +1,4 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 const file = 'src/App.css';
 let css = fs.readFileSync(file, 'utf8');
 

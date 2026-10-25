@@ -1,4 +1,4 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 
 const appPath = 'src/App.tsx';
 const cssPath = 'src/App.css';

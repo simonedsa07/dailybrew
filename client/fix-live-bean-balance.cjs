@@ -1,4 +1,4 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 
 const file = 'src/App.tsx';
 const backup = 'src/App.tsx.before-live-bean-balance';

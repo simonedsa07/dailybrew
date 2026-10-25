@@ -1,4 +1,4 @@
-﻿import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { config } from '../config';
@@ -26,7 +26,7 @@ export async function register(req: Request, res: Response, next: NextFunction):
       passwordHash,
     });
 
-    // Create starter cafÃ© layout
+    // Create starter café layout
     await CafeLayout.create({
       userId: user._id,
       roomTheme: 'cozy-brown',

@@ -1,4 +1,4 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 const file = 'patch-cafe-themes.cjs';
 let s = fs.readFileSync(file, 'utf8');
 
