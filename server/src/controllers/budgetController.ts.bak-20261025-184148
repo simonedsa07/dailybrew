@@ -1,4 +1,4 @@
-import { Response, NextFunction } from 'express';
+﻿import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../middleware/authenticate';
 import { Budget } from '../models/Budget';
 import { SavingsGoal } from '../models/SavingsGoal';
@@ -18,8 +18,8 @@ export async function getBudgets(req: AuthRequest, res: Response, next: NextFunc
 
 export async function upsertBudget(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
   try {
-    const { month } = req.params;
-    if (!/^\d{4}-\d{2}$/.test(month)) return next(createError('Month must be YYYY-MM.', 400));
+    const month = req.params.month;
+    if (typeof month !== 'string' || !/^\d{4}-\d{2}$/.test(month)) return next(createError('Month must be YYYY-MM.', 400));
 
     const data = budgetSchema.parse(req.body);
     const budget = await Budget.findOneAndUpdate(
@@ -79,3 +79,4 @@ export async function deleteSavingsGoal(req: AuthRequest, res: Response, next: N
     next(err);
   }
 }
+

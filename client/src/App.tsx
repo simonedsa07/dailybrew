@@ -1,4 +1,4 @@
-﻿import { useEffect, useState, useCallback, useMemo } from 'react'
+import { useEffect, useState, useCallback, useMemo } from 'react'
 import AuthScreen from './AuthScreen'
 import { apiRequest } from './lib/api'
 import './App.css'
@@ -124,63 +124,63 @@ type DashboardData = {
 }
 
 const moods = [
-  { name: 'Lovely', icon: 'ðŸ¥°' },
-  { name: 'Good', icon: 'ðŸ˜Š' },
-  { name: 'Okay', icon: 'ðŸ˜Œ' },
-  { name: 'Tired', icon: 'ðŸ¥±' },
-  { name: 'Low', icon: 'ðŸŒ§ï¸' },
+  { name: 'Lovely', icon: '🥰' },
+  { name: 'Good', icon: '😊' },
+  { name: 'Okay', icon: '😌' },
+  { name: 'Tired', icon: '🥱' },
+  { name: 'Low', icon: '🌧️' },
 ]
 
 const expenseCategories = [
-  { name: 'Food & drinks', icon: 'â˜•' },
-  { name: 'Transport', icon: 'ðŸš—' },
-  { name: 'Shopping', icon: 'ðŸ°' },
-  { name: 'Bills', icon: 'ðŸ§¾' },
-  { name: 'Entertainment', icon: 'ðŸŽ¬' },
-  { name: 'Other', icon: 'âœ¦' },
+  { name: 'Food & drinks', icon: '☕' },
+  { name: 'Transport', icon: '🚗' },
+  { name: 'Shopping', icon: '🍰' },
+  { name: 'Bills', icon: '🧾' },
+  { name: 'Entertainment', icon: '🎬' },
+  { name: 'Other', icon: '✦' },
 ]
 
-const habitIcons = ['ðŸ’§', 'ðŸ“š', 'ðŸŒ±', 'ðŸŒ·', 'ðŸ§˜', 'ðŸš¶', 'ðŸŽ', 'âœï¸', 'â˜•', 'âœ¨']
+const habitIcons = ['💧', '📚', '🌱', '🌷', '🧘', '🚶', '🍎', '✍️', '☕', '✨']
 
 const navItems = [
-  { name: 'Dashboard', icon: 'âŒ‚' },
-  { name: 'My habits', icon: 'â˜‘' },
-  { name: 'Expenses', icon: 'â—ˆ' },
-  { name: 'Daily journal', icon: 'â–¤' },
-  { name: 'My cafÃ©', icon: 'â˜•' },
-  { name: 'My Profile', icon: 'ðŸ‘¤' },
-
+  { name: 'Dashboard', icon: '⌂' },
+  { name: 'My habits', icon: '☑' },
+  { name: 'Expenses', icon: '◈' },
+  { name: 'Daily journal', icon: '▤' },
+  { name: 'My café', icon: '☕' },
+  { name: 'My Profile', icon: '👤' },
+  { name: 'Settings', icon: '⚙' },
 ]
 
 function getCafeItemIcon(item?: CafeCatalogItem) {
   const icons: Record<string, string> = {
-    plant_cactus: 'ðŸŒµ',
-    plant_fern: 'ðŸª´',
-    plant_bonsai: 'ðŸŒ³',
-    plant_sunflower: 'ðŸŒ»',
-    table_wood: 'ðŸªµ',
-    chair_cushion: 'ðŸª‘',
-    bookshelf_tall: 'ðŸ“š',
-    sofa_cozy: 'ðŸ›‹ï¸',
-    coffee_machine_deluxe: 'â˜•',
-    rug_checkered: 'ðŸŸ«',
-    wall_art_coffee: 'ðŸ–¼ï¸',
-    wall_clock: 'ðŸ•°ï¸',
-    chalkboard: 'ðŸª§',
-    lamp_floor: 'ðŸ›‹ï¸',
-    lamp_fairy: 'âœ¨',
-    lantern_paper: 'ðŸ®',
-    companion_cat: 'ðŸˆ',
-    companion_plant_buddy: 'ðŸŒ±',
+    plant_cactus: '🌵',
+    plant_fern: '🪴',
+    plant_bonsai: '🌳',
+    plant_sunflower: '🌻',
+    table_wood: '🪵',
+    chair_cushion: '🪑',
+    bookshelf_tall: '📚',
+    sofa_cozy: '🛋️',
+    coffee_machine_deluxe: '☕',
+    rug_checkered: '🟫',
+    wall_art_coffee: '🖼️',
+    wall_clock: '🕰️',
+    chalkboard: '🪧',
+    lamp_floor: '🛋️',
+    lamp_fairy: '✨',
+    lantern_paper: '🏮',
+    companion_cat: '🐈',
+    companion_plant_buddy: '🌱',
   }
-  return (item?.assetKey && icons[item.assetKey]) || 'âœ¦'
+  return (item?.assetKey && icons[item.assetKey]) || '✦'
 }
 
 function getCategoryIcon(categoryName: string) {
   const found = expenseCategories.find(
     (c) => c.name.toLowerCase() === categoryName.toLowerCase(),
   )
-  return found ? found.icon : 'ðŸ§¾'
+  return found ? found.icon : '🧾'
 }
 
 function getTodayString() {
@@ -196,12 +196,6 @@ function getCurrentMonthString() {
   const year = d.getFullYear()
   const month = String(d.getMonth() + 1).padStart(2, '0')
   return `${year}-${month}`
-}
-
-function getMonthEndString(month: string): string {
-  const [y, m] = month.split('-').map(Number)
-  const lastDay = new Date(Date.UTC(y, m, 0)).getUTCDate()
-  return `${month}-${String(lastDay).padStart(2, '0')}`
 }
 
 function formatDisplayDate() {
@@ -230,7 +224,7 @@ function App() {
   const [habitsLoading, setHabitsLoading] = useState(false)
   const [newHabitName, setNewHabitName] = useState('')
   const [newHabitCategory, setNewHabitCategory] = useState('General')
-  const [newHabitIcon, setNewHabitIcon] = useState('ðŸŒ¸')
+  const [newHabitIcon, setNewHabitIcon] = useState('🌸')
 
   // Expenses & Budgets state
   const [expenses, setExpenses] = useState<Transaction[]>([])
@@ -239,7 +233,7 @@ function App() {
   const [newExpenseName, setNewExpenseName] = useState('')
   const [newExpenseAmount, setNewExpenseAmount] = useState('')
   const [newExpenseCategory, setNewExpenseCategory] = useState('Food & drinks')
-  const [budget, setBudget] = useState('')
+  const [budget, setBudget] = useState('8000')
   const [savingBudget, setSavingBudget] = useState(false)
 
   // Journal state
@@ -250,7 +244,7 @@ function App() {
   const [journalLoading, setJournalLoading] = useState(false)
   const [pastEntries, setPastEntries] = useState<DailyJournalEntry[]>([])
 
-  // CafÃ© state
+  // Café state
   const [cafeItems, setCafeItems] = useState<CafeCatalogItem[]>([])
   const [cafeInventory, setCafeInventory] = useState<CafeInventoryItem[]>([])
   const [cafePlacements, setCafePlacements] = useState<CafePlacement[]>([])
@@ -267,25 +261,6 @@ function App() {
   // Profile / Settings state
   const [profileName, setProfileName] = useState('')
   const [savingSettings, setSavingSettings] = useState(false)
-
-  // Habit Editing state
-  const [editingHabit, setEditingHabit] = useState<Habit | null>(null)
-  const [editHabitName, setEditHabitName] = useState('')
-  const [editHabitCategory, setEditHabitCategory] = useState('General')
-  const [editHabitIcon, setEditHabitIcon] = useState('ðŸŒ¸')
-  const [editHabitFrequency, setEditHabitFrequency] = useState('daily')
-  const [savingHabitEdit, setSavingHabitEdit] = useState(false)
-
-  // Expense Editing state
-  const [editingExpense, setEditingExpense] = useState<Transaction | null>(null)
-  const [editExpenseName, setEditExpenseName] = useState('')
-  const [editExpenseAmount, setEditExpenseAmount] = useState('')
-  const [editExpenseCategory, setEditExpenseCategory] = useState('Food & drinks')
-  const [editExpenseDate, setEditExpenseDate] = useState('')
-  const [savingExpenseEdit, setSavingExpenseEdit] = useState(false)
-
-  // Ways to Earn Beans modal state
-  const [showWaysToEarn, setShowWaysToEarn] = useState(false)
 
   // 1. Session Restoration
   useEffect(() => {
@@ -340,8 +315,6 @@ function App() {
         }
         if (res.data.finance.overallBudget !== null) {
           setBudget(String(res.data.finance.overallBudget))
-        } else {
-          setBudget('')
         }
       }
     } catch (err) {
@@ -393,7 +366,7 @@ function App() {
       setExpensesLoading(true)
       try {
         const startDate = `${month}-01`
-        const endDate = getMonthEndString(month)
+        const endDate = `${month}-31`
         const [transRes, budgetRes] = await Promise.all([
           apiRequest<Transaction[]>(
             `/transactions?startDate=${startDate}&endDate=${endDate}&limit=100`,
@@ -443,7 +416,7 @@ function App() {
     }
   }, [user])
 
-  // 6. Fetch CafÃ© Data
+  // 6. Fetch Café Data
   const refreshCafe = useCallback(async () => {
     if (!user) return
     setCafeLoading(true)
@@ -467,7 +440,7 @@ function App() {
         setBeanBalance(cafeRes.data.beanBalance)
       }
     } catch (err) {
-      console.error('Failed to load cafÃ©:', err)
+      console.error('Failed to load café:', err)
     } finally {
       setCafeLoading(false)
     }
@@ -484,7 +457,7 @@ function App() {
       void refreshExpenses(selectedMonth)
     } else if (activePage === 'Daily journal') {
       void refreshJournal()
-    } else if (activePage === 'My cafÃ©') {
+    } else if (activePage === 'My café') {
       void refreshCafe()
     }
   }, [user, activePage, refreshDashboard, refreshHabits, refreshExpenses, refreshJournal, refreshCafe, selectedMonth])
@@ -505,14 +478,6 @@ function App() {
       console.error('Logout failed:', error)
     } finally {
       setUser(null)
-      setBeanBalance(0)
-      setHabits([])
-      setExpenses([])
-      setPastEntries([])
-      setDashboard(null)
-      setCafeInventory([])
-      setCafePlacements([])
-      setNotice('')
       setActivePage('Dashboard')
     }
   }
@@ -527,21 +492,20 @@ function App() {
         })
         setNotice(`Marked "${habit.name}" as undone.`)
       } else {
-        const res = await apiRequest<{ _id: string; completionDate: string }>(
-          `/habits/${habit._id}/completions`,
-          {
-            method: 'POST',
-            body: JSON.stringify({ date: today }),
-          },
-        )
-        const earned = res.beansEarned ?? (res.data as any)?.beansEarned ?? 0
+        const res = await apiRequest<{
+          beansEarned: number
+          data: { _id: string; completionDate: string }
+          alreadyCompleted: boolean
+        }>(`/habits/${habit._id}/completions`, {
+          method: 'POST',
+          body: JSON.stringify({ date: today }),
+        })
+        const earned = res.data?.beansEarned ?? 0
         if (earned > 0) {
           setBeanBalance((prev) => prev + earned)
-          setNotice(`Completed "${habit.name}"! +${earned} beans earned! ðŸ«˜`)
-        } else if (res.alreadyCompleted) {
-          setNotice(`"${habit.name}" was already marked as completed. â™¡`)
+          setNotice(`Completed "${habit.name}"! +${earned} beans earned! 🫘`)
         } else {
-          setNotice(`Completed "${habit.name}"! â™¡`)
+          setNotice(`Completed "${habit.name}"! ♡`)
         }
       }
       await refreshHabits()
@@ -564,46 +528,11 @@ function App() {
         }),
       })
       setNewHabitName('')
-      setNotice('Your new habit is ready ðŸŒ±')
+      setNotice('Your new habit is ready 🌱')
       await refreshHabits()
       await refreshDashboard()
     } catch (err) {
       setNotice(err instanceof Error ? err.message : 'Could not add habit.')
-    }
-  }
-
-  function startEditHabit(habit: Habit) {
-    setEditingHabit(habit)
-    setEditHabitName(habit.name)
-    setEditHabitCategory(habit.category)
-    setEditHabitIcon(habit.icon)
-    setEditHabitFrequency(habit.frequency)
-  }
-
-  async function handleUpdateHabit() {
-    if (!editingHabit || !editHabitName.trim()) {
-      setNotice('Please enter a habit name.')
-      return
-    }
-    setSavingHabitEdit(true)
-    try {
-      await apiRequest<Habit>(`/habits/${editingHabit._id}`, {
-        method: 'PATCH',
-        body: JSON.stringify({
-          name: editHabitName.trim(),
-          category: editHabitCategory,
-          icon: editHabitIcon,
-          frequency: editHabitFrequency,
-        }),
-      })
-      setNotice(`Updated "${editHabitName.trim()}" âœ¨`)
-      setEditingHabit(null)
-      await refreshHabits()
-      await refreshDashboard()
-    } catch (err) {
-      setNotice(err instanceof Error ? err.message : 'Could not update habit.')
-    } finally {
-      setSavingHabitEdit(false)
     }
   }
 
@@ -639,48 +568,11 @@ function App() {
       })
       setNewExpenseName('')
       setNewExpenseAmount('')
-      setNotice('Expense added to your list â˜•')
+      setNotice('Expense added to your list ☕')
       await refreshExpenses(selectedMonth)
       await refreshDashboard()
     } catch (err) {
       setNotice(err instanceof Error ? err.message : 'Could not add expense.')
-    }
-  }
-
-  function startEditExpense(expense: Transaction) {
-    setEditingExpense(expense)
-    setEditExpenseName(expense.description)
-    setEditExpenseAmount(String(expense.amount))
-    setEditExpenseCategory(expense.category)
-    setEditExpenseDate(expense.transactionDate)
-  }
-
-  async function handleUpdateExpense() {
-    if (!editingExpense) return
-    const amount = Number(editExpenseAmount)
-    if (!editExpenseName.trim() || !Number.isFinite(amount) || amount <= 0) {
-      setNotice('Enter an expense name and a valid positive amount.')
-      return
-    }
-    setSavingExpenseEdit(true)
-    try {
-      await apiRequest<Transaction>(`/transactions/${editingExpense._id}`, {
-        method: 'PATCH',
-        body: JSON.stringify({
-          description: editExpenseName.trim(),
-          amount,
-          category: editExpenseCategory,
-          transactionDate: editExpenseDate || getTodayString(),
-        }),
-      })
-      setNotice(`Updated expense "${editExpenseName.trim()}" â˜•`)
-      setEditingExpense(null)
-      await refreshExpenses(selectedMonth)
-      await refreshDashboard()
-    } catch (err) {
-      setNotice(err instanceof Error ? err.message : 'Could not update expense.')
-    } finally {
-      setSavingExpenseEdit(false)
     }
   }
 
@@ -696,13 +588,8 @@ function App() {
   }
 
   async function handleSaveBudget() {
-    if (budget.trim() === '') {
-      setNotice('Please enter a monthly budget amount first.')
-      return
-    }
-
     const budgetNum = Number(budget)
-    if (!Number.isFinite(budgetNum) || budgetNum < 0) {
+    if (isNaN(budgetNum) || budgetNum < 0) {
       setNotice('Please enter a valid non-negative budget amount.')
       return
     }
@@ -712,11 +599,11 @@ function App() {
         method: 'PUT',
         body: JSON.stringify({ overallLimit: budgetNum, categoryLimits: [] }),
       })
-      await apiRequest('/users/me', {
+      await apiRequest('/users/profile', {
         method: 'PATCH',
         body: JSON.stringify({ preferences: { monthlyBudget: budgetNum } }),
       })
-      setNotice(`Monthly budget set to â‚¹${budgetNum.toLocaleString('en-IN')}! ðŸ·`)
+      setNotice(`Monthly budget set to ₹${budgetNum.toLocaleString('en-IN')}! 🐷`)
       await refreshDashboard()
     } catch (err) {
       setNotice(err instanceof Error ? err.message : 'Could not save budget.')
@@ -729,7 +616,10 @@ function App() {
   async function handleSaveJournal() {
     const today = getTodayString()
     try {
-      const res = await apiRequest<DailyJournalEntry>(`/daily-entries/${today}`, {
+      const res = await apiRequest<{
+        data: DailyJournalEntry
+        beansEarned?: number
+      }>(`/daily-entries/${today}`, {
         method: 'PUT',
         body: JSON.stringify({
           mood: mood ? mood.toLowerCase() : undefined,
@@ -737,14 +627,14 @@ function App() {
           waterIntake: water,
         }),
       })
-      const earned = res.beansEarned ?? (res.data as any)?.beansEarned ?? 0
+      const earned = res.data?.beansEarned ?? 0
       if (earned > 0) {
         setBeanBalance((prev) => prev + earned)
         setNotice(
-          `Check-in saved! +${earned} beans earned for today's gentle check-in! ðŸ«˜`,
+          `Check-in saved! +${earned} beans earned for today's gentle check-in! 🫘`,
         )
       } else {
-        setNotice('Your gentle thoughts have been saved â™¡')
+        setNotice('Your gentle thoughts have been saved ♡')
       }
       await refreshJournal()
       await refreshDashboard()
@@ -753,7 +643,7 @@ function App() {
     }
   }
 
-  // ---- CafÃ© Handlers ----
+  // ---- Café Handlers ----
   const ownedCafeItems = useMemo(() => {
     return cafeInventory.reduce<Array<{ itemId: string; quantity: number }>>(
       (owned, entry) => {
@@ -793,7 +683,7 @@ function App() {
         setCafeInventory(refreshedCafe.data?.layout?.inventory ?? [])
       }
       setPurchaseConfirmation({
-        name: item?.name ?? 'CafÃ© item',
+        name: item?.name ?? 'Café item',
         price: item?.price ?? 0,
         balance: newBalance,
       })
@@ -859,12 +749,12 @@ function App() {
         method: 'PUT',
         body: JSON.stringify({ roomTheme, placements: cafePlacements }),
       })
-      setNotice('Your cafÃ© layout has been saved! â™¡')
+      setNotice('Your café layout has been saved! ♡')
     } catch (error) {
       setNotice(
         error instanceof Error
           ? error.message
-          : 'Could not save your cafÃ© layout.',
+          : 'Could not save your café layout.',
       )
     } finally {
       setLayoutSaving(false)
@@ -873,54 +763,47 @@ function App() {
 
   // ---- Settings Handler ----
   async function handleSaveSettings() {
-    const hasBudget = budget.trim() !== ''
-    const budgetNum = Number(budget)
-
-    if (hasBudget && (!Number.isFinite(budgetNum) || budgetNum < 0)) {
-      setNotice('Please enter a valid non-negative budget amount.')
-      return
-    }
-
     setSavingSettings(true)
     try {
-      await apiRequest('/users/me', {
-        method: 'PATCH',
-        body: JSON.stringify({
-          name: profileName.trim() || user?.name,
-          preferences: {
-            ...(hasBudget ? { monthlyBudget: budgetNum } : {}),
-            waterTarget,
-          },
+      const budgetNum = Number(budget) || 0
+      await Promise.all([
+        apiRequest('/users/profile', {
+          method: 'PATCH',
+          body: JSON.stringify({
+            name: profileName.trim() || user?.name,
+            preferences: {
+              monthlyBudget: budgetNum,
+              waterTarget: waterTarget,
+            },
+          }),
         }),
-      })
-
-      if (hasBudget) {
-        await apiRequest(`/budgets/${selectedMonth}`, {
+        apiRequest(`/budgets/${selectedMonth}`, {
           method: 'PUT',
           body: JSON.stringify({ overallLimit: budgetNum, categoryLimits: [] }),
-        })
-      }
-
+        }),
+      ])
       if (user) {
         setUser({
           ...user,
           name: profileName.trim() || user.name,
           preferences: {
             ...user.preferences,
-            ...(hasBudget ? { monthlyBudget: budgetNum } : {}),
-            waterTarget,
+            monthlyBudget: budgetNum,
+            waterTarget: waterTarget,
           },
         })
       }
-
       setNotice('Your preferences have been saved to your account! ☕')
       await refreshDashboard()
     } catch (err) {
-      setNotice(err instanceof Error ? err.message : 'Could not save preferences.')
+      setNotice(
+        err instanceof Error ? err.message : 'Could not save preferences.',
+      )
     } finally {
       setSavingSettings(false)
     }
   }
+
   // Calculations
   const completedHabitsCount = habits.filter((h) => h.isCompletedToday).length
   const totalHabitsCount = habits.length
@@ -949,7 +832,7 @@ function App() {
     if (activePage === 'My habits') return 'Small steps still count.'
     if (activePage === 'Expenses') return 'Know where your money goes.'
     if (activePage === 'Daily journal') return 'A little space for you.'
-    if (activePage === 'My cafÃ©') return 'Your cafÃ©, your cozy rules.'
+    if (activePage === 'My café') return 'Your café, your cozy rules.'
     if (activePage === 'My Profile') return 'A little space that belongs to you.'
     return 'Make yourself at home.'
   }
@@ -964,7 +847,7 @@ function App() {
             setNotice('')
           }}
         >
-          <span className="brand-cup">â˜•</span>
+          <span className="brand-cup">☕</span>
           <span>
             <strong>daily brew</strong>
             <small>your daily dose of cozy</small>
@@ -984,7 +867,7 @@ function App() {
             >
               <span className="nav-icon">{item.icon}</span>
               <span>{item.name}</span>
-              {item.name === 'My cafÃ©' && <span className="nav-sparkle">âœ¦</span>}
+              {item.name === 'My café' && <span className="nav-sparkle">✦</span>}
             </button>
           ))}
         </nav>
@@ -992,13 +875,13 @@ function App() {
         <div className="sidebar-spacer" />
         <div className="sidebar-cafe">
           <div className="mini-cafe-art" aria-hidden="true">
-            <span>â˜</span>
-            <span>ðŸª´</span>
-            <span>â˜•</span>
+            <span>☁</span>
+            <span>🪴</span>
+            <span>☕</span>
           </div>
           <p className="pixel-label">A GENTLE REMINDER</p>
           <p className="reminder">You don't have to bloom every day.</p>
-          <span className="tiny-sparkles">âœ³ âœ¦ âœ³</span>
+          <span className="tiny-sparkles">✳ ✦ ✳</span>
         </div>
         <button
           className="profile-button"
@@ -1014,18 +897,7 @@ function App() {
             <strong>{user.name}</strong>
             <small>{user.email}</small>
           </span>
-          <span className="profile-dots">Â·Â·Â·</span>
-        </button>
-        <button
-          type="button"
-          className={`nav-item sidebar-settings-button ${activePage === 'Settings' ? 'active' : ''}`}
-          onClick={() => {
-            setActivePage('Settings')
-            setNotice('')
-          }}
-        >
-          <span className="nav-icon">⚙</span>
-          <span>Settings</span>
+          <span className="profile-dots">···</span>
         </button>
       </aside>
 
@@ -1035,23 +907,17 @@ function App() {
             My space <span>/</span> <strong>{activePage}</strong>
           </div>
           <div className="topbar-right">
-            <span className="date-chip">â˜€ {formatDisplayDate()}</span>
-            <button
-              type="button"
-              className="bean-chip"
-              onClick={() => setShowWaysToEarn(true)}
-              title="Click to view ways to earn coffee beans"
-              style={{ cursor: 'pointer', border: 'none' }}
-            >
-              ðŸ«˜ <strong>{beanBalance}</strong> beans
-            </button>
+            <span className="date-chip">☀ {formatDisplayDate()}</span>
+            <span className="bean-chip">
+              🫘 <strong>{beanBalance}</strong> beans
+            </span>
           </div>
         </header>
 
         <div className="page-content">
           <section className="welcome-row">
             <div>
-              <p className="eyebrow">A FRESH LITTLE START âœ¿</p>
+              <p className="eyebrow">A FRESH LITTLE START ✿</p>
               <h1>
                 {activePage === 'Dashboard' ? (
                   <>
@@ -1066,7 +932,7 @@ function App() {
               <p className="welcome-subtitle">
                 {activePage === 'Dashboard'
                   ? 'Take a breath, grab a pretend latte, and see how your day is going.'
-                  : 'There is no rush. Letâ€™s take it one little step at a time.'}
+                  : 'There is no rush. Let’s take it one little step at a time.'}
               </p>
             </div>
             <div
@@ -1074,27 +940,27 @@ function App() {
               aria-label="Cozy pixel-inspired coffee illustration"
             >
               <div className="art-sun" />
-              <span className="art-star star-one">âœ¦</span>
-              <span className="art-star star-two">âœ³</span>
-              <span className="art-leaf">ðŸŒ¿</span>
+              <span className="art-star star-one">✦</span>
+              <span className="art-star star-two">✳</span>
+              <span className="art-leaf">🌿</span>
               <div className="art-window">
                 <div className="window-cross" />
               </div>
               <div className="art-shelf" />
-              <div className="art-pot">ðŸª´</div>
+              <div className="art-pot">🪴</div>
               <div className="art-cup">
-                <span>â™¡</span>
+                <span>♡</span>
                 <i />
               </div>
-              <div className="art-book">â–¤</div>
+              <div className="art-book">▤</div>
             </div>
           </section>
 
           {notice && (
             <div className="notice" role="status">
-              <span>âœ¿</span> {notice}
+              <span>✿</span> {notice}
               <button onClick={() => setNotice('')} aria-label="Dismiss message">
-                Ã—
+                ×
               </button>
             </div>
           )}
@@ -1105,7 +971,7 @@ function App() {
               <section className="stats-grid">
                 <article className="stat-card stat-habits">
                   <div className="stat-top">
-                    <span className="stat-icon">ðŸŒ±</span>
+                    <span className="stat-icon">🌱</span>
                     <span className="stat-tag">TODAY</span>
                   </div>
                   <p className="stat-label">Little habits done</p>
@@ -1121,19 +987,19 @@ function App() {
                   </div>
                   <p className="stat-foot">
                     {habitProgressPercent === 100
-                      ? 'Look at you go! âœ¨'
+                      ? 'Look at you go! ✨'
                       : 'Every little step counts.'}
                   </p>
                 </article>
 
                 <article className="stat-card stat-spending">
                   <div className="stat-top">
-                    <span className="stat-icon">ðŸª™</span>
+                    <span className="stat-icon">🪙</span>
                     <span className="stat-tag">THIS MONTH</span>
                   </div>
                   <p className="stat-label">Little things spent</p>
                   <div className="stat-number">
-                    â‚¹
+                    ₹
                     {(
                       dashboard?.finance.totalExpenses ?? totalSpent
                     ).toLocaleString('en-IN')}
@@ -1148,41 +1014,33 @@ function App() {
 
                 <article className="stat-card stat-budget">
                   <div className="stat-top">
-                    <span className="stat-icon">ðŸ·</span>
+                    <span className="stat-icon">🐷</span>
                     <span className="stat-tag">YOUR BUDGET</span>
                   </div>
                   <p className="stat-label">Still in your pocket</p>
                   <div className="stat-number">
-                    {budget.trim() !== ''
-                      ? `₹${(
-                          dashboard?.finance.remainingBudget ?? remainingBudget
-                        ).toLocaleString('en-IN')}`
-                      : 'Not set'}
+                    ₹
+                    {(
+                      dashboard?.finance.remainingBudget ?? remainingBudget
+                    ).toLocaleString('en-IN')}
                   </div>
                   <p className="stat-foot">
-                    {budget.trim() === ''
-                      ? 'Set a monthly budget to track your remaining amount.'
-                      : (dashboard?.finance.remainingBudget ?? remainingBudget) >= 0
-                        ? 'You are doing just fine.'
-                        : 'You are over your budget.'}
+                    {(dashboard?.finance.remainingBudget ?? remainingBudget) >= 0
+                      ? 'You are doing just fine.'
+                      : 'You are over your budget.'}
                   </p>
                 </article>
 
-                <article
-                  className="stat-card stat-beans"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => setShowWaysToEarn(true)}
-                  title="Click to view ways to earn coffee beans"
-                >
+                <article className="stat-card stat-beans">
                   <div className="stat-top">
-                    <span className="stat-icon">â˜•</span>
-                    <span className="stat-tag">CAFÃ‰ WALLET â†—</span>
+                    <span className="stat-icon">☕</span>
+                    <span className="stat-tag">CAFÉ WALLET</span>
                   </div>
                   <p className="stat-label">Coffee beans</p>
                   <div className="stat-number">
                     {beanBalance} <span>beans</span>
                   </div>
-                  <p className="stat-foot">Your next cozy upgrade awaits. Tap to earn ðŸ«˜</p>
+                  <p className="stat-foot">Your next cozy upgrade awaits.</p>
                 </article>
               </section>
 
@@ -1193,14 +1051,14 @@ function App() {
                     <div>
                       <p className="eyebrow">YOUR DAILY RITUALS</p>
                       <h2>
-                        Today's little habits <span>âœ¿</span>
+                        Today's little habits <span>✿</span>
                       </h2>
                     </div>
                     <button
                       className="text-link"
                       onClick={() => setActivePage('My habits')}
                     >
-                      See all â†—
+                      See all ↗
                     </button>
                   </div>
                   <div className="habit-progress-caption">
@@ -1222,7 +1080,7 @@ function App() {
 
                   {!dashboardLoading && habits.length === 0 && (
                     <div className="empty-state">
-                      <span>ðŸŒ±</span>
+                      <span>🌱</span>
                       <p>No habits added yet. Plant your first little ritual!</p>
                     </div>
                   )}
@@ -1238,18 +1096,18 @@ function App() {
                         <span className="habit-copy">
                           <strong>{habit.name}</strong>
                           <small>
-                            {habit.frequency} Â· {habit.category}
+                            {habit.frequency} · {habit.category}
                           </small>
                         </span>
                         {habit.currentStreak ? (
                           <span className="streak-badge">
-                            ðŸ”¥ {habit.currentStreak}
+                            🔥 {habit.currentStreak}
                           </span>
                         ) : null}
                         <span
                           className={`habit-check ${habit.isCompletedToday ? 'checked' : ''}`}
                         >
-                          {habit.isCompletedToday ? 'âœ“' : ''}
+                          {habit.isCompletedToday ? '✓' : ''}
                         </span>
                       </button>
                     ))}
@@ -1269,7 +1127,7 @@ function App() {
                       <p className="eyebrow">A MOMENT FOR YOU</p>
                       <h2>How's your heart?</h2>
                     </div>
-                    <span className="heading-doodle">â™¡</span>
+                    <span className="heading-doodle">♡</span>
                   </div>
                   <p className="panel-description">
                     There are no wrong answers. Just check in with yourself.
@@ -1302,7 +1160,7 @@ function App() {
                     className="primary-button full-button"
                     onClick={() => void handleSaveJournal()}
                   >
-                    Save my check-in â™¡ (+3 beans)
+                    Save my check-in ♡ (+3 beans)
                   </button>
                 </article>
 
@@ -1317,13 +1175,13 @@ function App() {
                       className="text-link"
                       onClick={() => setActivePage('Expenses')}
                     >
-                      View all â†—
+                      View all ↗
                     </button>
                   </div>
 
                   {expenses.length === 0 ? (
                     <div className="empty-state">
-                      <span>â˜•</span>
+                      <span>☕</span>
                       <p>No expenses recorded this month yet.</p>
                     </div>
                   ) : (
@@ -1338,7 +1196,7 @@ function App() {
                             <small>{expense.category}</small>
                           </span>
                           <strong className="expense-amount">
-                            âˆ’â‚¹{expense.amount.toLocaleString('en-IN')}
+                            −₹{expense.amount.toLocaleString('en-IN')}
                           </strong>
                         </div>
                       ))}
@@ -1347,36 +1205,36 @@ function App() {
 
                   <div className="spending-summary">
                     <span>Spent so far</span>
-                    <strong>â‚¹{totalSpent.toLocaleString('en-IN')}</strong>
+                    <strong>₹{totalSpent.toLocaleString('en-IN')}</strong>
                   </div>
                 </article>
 
-                {/* CafÃ© Preview Widget */}
+                {/* Café Preview Widget */}
                 <article className="panel cafe-panel">
                   <div className="panel-heading">
                     <div>
                       <p className="eyebrow">YOUR HAPPY PLACE</p>
-                      <h2>The little cafÃ©</h2>
+                      <h2>The little café</h2>
                     </div>
-                    <span className="cafe-badge">OPEN â™¡</span>
+                    <span className="cafe-badge">OPEN ♡</span>
                   </div>
                   <div className={`cafe-scene theme-${roomTheme}`}>
-                    <div className="cafe-cloud">â˜</div>
+                    <div className="cafe-cloud">☁</div>
                     <div className="cafe-window-art">
-                      <span>âœ¦</span>
-                      <span>âœ¿</span>
+                      <span>✦</span>
+                      <span>✿</span>
                     </div>
                     <div className="cafe-shelf-art">
-                      <span>ðŸ“š</span>
-                      <span>ðŸª´</span>
-                      <span>âœ¨</span>
+                      <span>📚</span>
+                      <span>🪴</span>
+                      <span>✨</span>
                     </div>
                     <div className="cafe-counter">
-                      <span className="counter-plant">ðŸŒ¿</span>
+                      <span className="counter-plant">🌿</span>
                       <span className="counter-machine">
-                        â˜•<small>â˜•</small>
+                        ☕<small>☕</small>
                       </span>
-                      <span className="counter-cup">â˜•</span>
+                      <span className="counter-cup">☕</span>
                     </div>
                     <div className="cafe-floor" />
                   </div>
@@ -1384,15 +1242,15 @@ function App() {
                     <p>
                       <strong>Your cozy corner is waiting.</strong>
                       <small>
-                        {ownedCafeItems.length} items owned Â· {cafePlacements.length} placed
+                        {ownedCafeItems.length} items owned · {cafePlacements.length} placed
                       </small>
                     </p>
                     <button
                       className="round-arrow"
-                      onClick={() => setActivePage('My cafÃ©')}
-                      aria-label="Visit your cafÃ©"
+                      onClick={() => setActivePage('My café')}
+                      aria-label="Visit your café"
                     >
-                      â†—
+                      ↗
                     </button>
                   </div>
                 </article>
@@ -1406,7 +1264,7 @@ function App() {
               <div className="panel-heading">
                 <div>
                   <p className="eyebrow">ONE DAY AT A TIME</p>
-                  <h2>My habit garden ðŸŒ·</h2>
+                  <h2>My habit garden 🌷</h2>
                 </div>
                 <span className="stat-tag">
                   {completedHabitsCount}/{totalHabitsCount} DONE
@@ -1460,7 +1318,7 @@ function App() {
 
               {!habitsLoading && habits.length === 0 && (
                 <div className="empty-state">
-                  <span>ðŸŒ·</span>
+                  <span>🌷</span>
                   <p>Your habit garden is waiting for its first seeds.</p>
                 </div>
               )}
@@ -1476,29 +1334,19 @@ function App() {
                       <span className="habit-copy">
                         <strong>{habit.name}</strong>
                         <small>
-                          {habit.frequency} Â· {habit.category}
+                          {habit.frequency} · {habit.category}
                         </small>
                       </span>
                       {habit.currentStreak ? (
                         <span className="streak-badge">
-                          ðŸ”¥ {habit.currentStreak} day streak
+                          🔥 {habit.currentStreak} day streak
                         </span>
                       ) : null}
                       <span
                         className={`habit-check ${habit.isCompletedToday ? 'checked' : ''}`}
                       >
-                        {habit.isCompletedToday ? 'âœ“' : ''}
+                        {habit.isCompletedToday ? '✓' : ''}
                       </span>
-                    </button>
-                    <button
-                      className="edit-button"
-                      type="button"
-                      onClick={() => startEditHabit(habit)}
-                      aria-label={`Edit ${habit.name}`}
-                      title="Edit habit"
-                      style={{ marginRight: '6px' }}
-                    >
-                      âœŽ
                     </button>
                     <button
                       className="delete-button"
@@ -1506,7 +1354,7 @@ function App() {
                       onClick={() => void handleDeleteHabit(habit._id)}
                       aria-label={`Delete ${habit.name}`}
                     >
-                      Ã—
+                      ×
                     </button>
                   </div>
                 ))}
@@ -1522,19 +1370,19 @@ function App() {
                   <p className="eyebrow">MONEY, GENTLY</p>
                   <h2>My little expense book</h2>
                 </div>
-                <span className="stat-tag">INR Â· â‚¹</span>
+                <span className="stat-tag">INR · ₹</span>
               </div>
 
               <div className="expense-total-card">
                 <span>Total spent in {selectedMonth}</span>
-                <strong>â‚¹{totalSpent.toLocaleString('en-IN')}</strong>
+                <strong>₹{totalSpent.toLocaleString('en-IN')}</strong>
                 <small>
-                  {expenses.length} recorded transactions Â· Synced with MongoDB
+                  {expenses.length} recorded transactions · Synced with MongoDB
                 </small>
               </div>
 
               <div className="budget-editor">
-                <label htmlFor="budget">Monthly budget (â‚¹)</label>
+                <label htmlFor="budget">Monthly budget (₹)</label>
                 <input
                   id="budget"
                   type="number"
@@ -1554,16 +1402,10 @@ function App() {
                   Remaining:{' '}
                   <strong
                     style={{
-                      color: budget.trim() !== '' && remainingBudget >= 0
-                        ? '#436d4e'
-                        : budget.trim() !== ''
-                          ? '#b24a3b'
-                          : '#777',
+                      color: remainingBudget >= 0 ? '#436d4e' : '#b24a3b',
                     }}
                   >
-                    {budget.trim() !== ''
-                      ? `₹${remainingBudget.toLocaleString('en-IN')}`
-                      : 'Not set'}
+                    ₹{remainingBudget.toLocaleString('en-IN')}
                   </strong>
                 </span>
               </div>
@@ -1592,7 +1434,7 @@ function App() {
                   type="number"
                   min="1"
                   step="1"
-                  placeholder="Amount â‚¹"
+                  placeholder="Amount ₹"
                   aria-label="Expense amount"
                 />
                 <select
@@ -1618,7 +1460,7 @@ function App() {
 
               {!expensesLoading && expenses.length === 0 && (
                 <div className="empty-state">
-                  <span>â˜•</span>
+                  <span>☕</span>
                   <p>No spends logged for {selectedMonth}.</p>
                 </div>
               )}
@@ -1632,28 +1474,18 @@ function App() {
                     <span className="expense-copy">
                       <strong>{expense.description}</strong>
                       <small>
-                        {expense.category} Â· {expense.transactionDate}
+                        {expense.category} · {expense.transactionDate}
                       </small>
                     </span>
                     <strong className="expense-amount">
-                      â‚¹{expense.amount.toLocaleString('en-IN')}
+                      ₹{expense.amount.toLocaleString('en-IN')}
                     </strong>
-                    <button
-                      className="edit-button"
-                      type="button"
-                      onClick={() => startEditExpense(expense)}
-                      aria-label={`Edit ${expense.description}`}
-                      title="Edit expense"
-                      style={{ marginRight: '6px' }}
-                    >
-                      âœŽ
-                    </button>
                     <button
                       className="delete-button"
                       onClick={() => void handleDeleteExpense(expense._id)}
                       aria-label={`Delete ${expense.description}`}
                     >
-                      Ã—
+                      ×
                     </button>
                   </div>
                 ))}
@@ -1665,9 +1497,9 @@ function App() {
           {activePage === 'Daily journal' && (
             <section className="panel standalone-panel journal-page">
               <p className="eyebrow">A SOFT PLACE TO LAND</p>
-              <h2>Dear little diary... âœ¿</h2>
+              <h2>Dear little diary... ✿</h2>
               <p className="panel-description">
-                You don't have to make sense of everything. Just start wherever you are. (+5 beans awarded on your first daily check-in!)
+                You don't have to make sense of everything. Just start wherever you are. (+3 beans awarded on your first daily check-in!)
               </p>
 
               {journalLoading && (
@@ -1696,7 +1528,7 @@ function App() {
                   <small>Glasses of water drank today</small>
                 </span>
                 <div className="water-control">
-                  <button onClick={() => setWater(Math.max(0, water - 1))}>âˆ’</button>
+                  <button onClick={() => setWater(Math.max(0, water - 1))}>−</button>
                   <strong>{water} glasses</strong>
                   <button onClick={() => setWater(Math.min(20, water + 1))}>+</button>
                 </div>
@@ -1716,7 +1548,7 @@ function App() {
                 className="primary-button"
                 onClick={() => void handleSaveJournal()}
               >
-                Keep this little moment â™¡
+                Keep this little moment ♡
               </button>
 
               {pastEntries.length > 0 && (
@@ -1726,8 +1558,8 @@ function App() {
                     {pastEntries.slice(0, 5).map((entry) => (
                       <article className="journal-history-card" key={entry._id || entry.date}>
                         <div className="journal-history-header">
-                          <span>ðŸ“… {entry.date}</span>
-                          <span>{entry.mood ? `Feeling ${entry.mood} â™¡` : ''} Â· ðŸ’§ {entry.waterIntake ?? 0} glasses</span>
+                          <span>📅 {entry.date}</span>
+                          <span>{entry.mood ? `Feeling ${entry.mood} ♡` : ''} · 💧 {entry.waterIntake ?? 0} glasses</span>
                         </div>
                         {entry.note ? <p style={{ fontSize: '12px', color: 'var(--ink)', margin: 0, whiteSpace: 'pre-wrap' }}>{entry.note}</p> : <small style={{ color: '#a28b75' }}>No note written</small>}
                       </article>
@@ -1738,26 +1570,18 @@ function App() {
             </section>
           )}
 
-          {/* ================= MY CAFÃ‰ ================= */}
-          {activePage === 'My cafÃ©' && (
+          {/* ================= MY CAFÉ ================= */}
+          {activePage === 'My café' && (
             <section className="panel standalone-panel">
               <div className="panel-heading">
                 <div>
                   <p className="eyebrow">BREWED WITH LOVE</p>
-                  <h2>Your very own pixel cafÃ©</h2>
+                  <h2>Your very own pixel café</h2>
                 </div>
-                <button
-                  type="button"
-                  className="bean-chip"
-                  onClick={() => setShowWaysToEarn(true)}
-                  style={{ cursor: 'pointer', border: 'none' }}
-                  title="Click to view ways to earn beans"
-                >
-                  ðŸ«˜ <strong>{beanBalance}</strong> beans â†—
-                </button>
+                <span className="bean-chip">🫘 {beanBalance} beans</span>
               </div>
               <p className="panel-description">
-                A little room to make your own. Pick out something cozy from the shop below and place it in your cafÃ©.
+                A little room to make your own. Pick out something cozy from the shop below and place it in your café.
               </p>
 
               {/* Room Scene */}
@@ -1797,11 +1621,11 @@ function App() {
                 }}
               >
                 <div className="big-cafe-window">
-                  â˜<span>âœ¦</span>
-                  <i>âœ¿</i>
+                  ☁<span>✦</span>
+                  <i>✿</i>
                 </div>
-                <div className="big-cafe-shelf">ðŸ“š ðŸª´ ðŸ“š</div>
-                <div className="big-cafe-counter">ðŸŒ¿ â˜• ðŸª´</div>
+                <div className="big-cafe-shelf">📚 🪴 📚</div>
+                <div className="big-cafe-counter">🌿 ☕ 🪴</div>
                 <div className="big-cafe-floor" />
                 <div className="room-placement-layer">
                   {cafePlacements.map((placement) => {
@@ -1815,8 +1639,8 @@ function App() {
                         className="room-placement"
                         key={placement.instanceId}
                         draggable
-                        title={`${item.name} â€” drag to move`}
-                        aria-label={`${item.name}, placed in your cafÃ©`}
+                        title={`${item.name} — drag to move`}
+                        aria-label={`${item.name}, placed in your café`}
                         style={{
                           left: `${(placement.slotX / 7) * 100}%`,
                           top: `${(placement.slotY / 3) * 100}%`,
@@ -1835,15 +1659,15 @@ function App() {
 
               {/* Theme Picker */}
               <div className="room-theme-picker">
-                <label htmlFor="cafe-room-theme">Choose your cafÃ© mood</label>
+                <label htmlFor="cafe-room-theme">Choose your café mood</label>
                 <select
                   id="cafe-room-theme"
                   value={roomTheme}
                   onChange={(event) => setRoomTheme(event.target.value)}
                 >
-                  <option value="cozy-brown">â˜• Cozy Brown</option>
-                  <option value="sakura">ðŸŒ¸ Sakura Dreams</option>
-                  <option value="midnight-cafe">ðŸŒ™ Midnight CafÃ©</option>
+                  <option value="cozy-brown">☕ Cozy Brown</option>
+                  <option value="sakura">🌸 Sakura Dreams</option>
+                  <option value="midnight-cafe">🌙 Midnight Café</option>
                 </select>
                 <p className="small-note">
                   Choose a look, then save your layout to keep it.
@@ -1854,7 +1678,7 @@ function App() {
               <div className="room-editor-controls">
                 <div className="room-editor-heading">
                   <div>
-                    <h3 className="section-subtitle">Arrange your cafÃ©</h3>
+                    <h3 className="section-subtitle">Arrange your café</h3>
                     <p className="small-note">
                       Place items from your inventory, then drag them around or use the arrows.
                     </p>
@@ -1865,7 +1689,7 @@ function App() {
                     disabled={layoutSaving}
                     onClick={() => void saveCafeLayout()}
                   >
-                    {layoutSaving ? 'Saving...' : 'Save layout â™¡'}
+                    {layoutSaving ? 'Saving...' : 'Save layout ♡'}
                   </button>
                 </div>
 
@@ -1896,7 +1720,7 @@ function App() {
                                 moveCafePlacement(placement.instanceId, -1, 0)
                               }
                             >
-                              â†
+                              ←
                             </button>
                             <button
                               type="button"
@@ -1905,7 +1729,7 @@ function App() {
                                 moveCafePlacement(placement.instanceId, 0, -1)
                               }
                             >
-                              â†‘
+                              ↑
                             </button>
                             <button
                               type="button"
@@ -1914,7 +1738,7 @@ function App() {
                                 moveCafePlacement(placement.instanceId, 0, 1)
                               }
                             >
-                              â†“
+                              ↓
                             </button>
                             <button
                               type="button"
@@ -1923,7 +1747,7 @@ function App() {
                                 moveCafePlacement(placement.instanceId, 1, 0)
                               }
                             >
-                              â†’
+                              →
                             </button>
                             <button
                               type="button"
@@ -1943,13 +1767,13 @@ function App() {
               </div>
 
               {/* Shop Grid */}
-              <h3 className="section-subtitle">A few things for your cafÃ©</h3>
+              <h3 className="section-subtitle">A few things for your café</h3>
               {cafeLoading && (
-                <p className="small-note">Loading your cafÃ© catalog...</p>
+                <p className="small-note">Loading your café catalog...</p>
               )}
               {!cafeLoading && cafeItems.length === 0 && (
                 <p className="small-note">
-                  No cafÃ© items are available right now. Check that the catalog has been seeded.
+                  No café items are available right now. Check that the catalog has been seeded.
                 </p>
               )}
               <div className="shop-grid">
@@ -1958,7 +1782,7 @@ function App() {
                     <span>{getCafeItemIcon(item)}</span>
                     <strong>{item.name}</strong>
                     {item.description && <p>{item.description}</p>}
-                    <small>ðŸ«˜ {item.price} beans</small>
+                    <small>🫘 {item.price} beans</small>
                     <button
                       className="soft-button"
                       disabled={
@@ -1989,7 +1813,7 @@ function App() {
                   <div>
                     <h3 className="section-subtitle">My Items</h3>
                     <p className="small-note">
-                      Everything you have bought for your little cafÃ©.
+                      Everything you have bought for your little café.
                     </p>
                   </div>
                   <span className="cafe-inventory-count">
@@ -1998,7 +1822,7 @@ function App() {
                 </div>
                 {ownedCafeItems.length === 0 ? (
                   <div className="cafe-inventory-empty">
-                    <span>ðŸ§º</span>
+                    <span>🧺</span>
                     <p>Your shelves are waiting for their first little treasures.</p>
                     <small>Buy something from the shop above to see it here.</small>
                   </div>
@@ -2022,10 +1846,10 @@ function App() {
                           </span>
                           <div className="cafe-inventory-details">
                             <strong>{item.name}</strong>
-                            <small>{item.category || 'CafÃ© item'}</small>
+                            <small>{item.category || 'Café item'}</small>
                           </div>
                           <span className="cafe-inventory-quantity">
-                            Ã—{ownedItem.quantity}
+                            ×{ownedItem.quantity}
                           </span>
                           <button
                             type="button"
@@ -2053,7 +1877,7 @@ function App() {
           {activePage === 'My Profile' && (
             <section className="panel standalone-panel">
               <p className="eyebrow">YOUR LITTLE CORNER</p>
-              <h2>My profile â˜•</h2>
+              <h2>My profile ☕</h2>
               <p className="panel-description">
                 A little space that belongs to you.
               </p>
@@ -2082,10 +1906,10 @@ function App() {
               </div>
               <div className="settings-row">
                 <span>
-                  <strong>CafÃ© beans</strong>
+                  <strong>Café beans</strong>
                   <small>Your current bean balance.</small>
                 </span>
-                <strong>ðŸ«˜ {beanBalance}</strong>
+                <strong>🫘 {beanBalance}</strong>
               </div>
               <div className="settings-row">
                 <span>
@@ -2099,7 +1923,7 @@ function App() {
                 type="button"
                 onClick={() => setActivePage('Settings')}
               >
-                Open settings â†’
+                Open settings →
               </button>
             </section>
           )}
@@ -2108,7 +1932,7 @@ function App() {
           {activePage === 'Settings' && (
             <section className="panel standalone-panel">
               <p className="eyebrow">YOUR SPACE, YOUR PACE</p>
-              <h2>A few little preferences âš™</h2>
+              <h2>A few little preferences ⚙</h2>
               <p className="panel-description">
                 Personalize your Daily Brew experience.
               </p>
@@ -2127,7 +1951,7 @@ function App() {
 
               <div className="settings-row">
                 <span>
-                  <strong>Monthly budget (â‚¹)</strong>
+                  <strong>Monthly budget (₹)</strong>
                   <small>Set the amount you want to keep an eye on.</small>
                 </span>
                 <input
@@ -2146,7 +1970,7 @@ function App() {
                 </span>
                 <div className="water-control">
                   <button onClick={() => setWaterTarget(Math.max(1, waterTarget - 1))}>
-                    âˆ’
+                    −
                   </button>
                   <strong>{waterTarget} glasses</strong>
                   <button onClick={() => setWaterTarget(Math.min(20, waterTarget + 1))}>
@@ -2170,7 +1994,7 @@ function App() {
                 onClick={() => void handleSaveSettings()}
                 style={{ marginTop: '12px', width: '100%' }}
               >
-                {savingSettings ? 'Saving...' : 'Save preferences â™¡'}
+                {savingSettings ? 'Saving...' : 'Save preferences ♡'}
               </button>
 
               <button
@@ -2203,25 +2027,25 @@ function App() {
                   aria-label="Close confirmation"
                   onClick={() => setPurchaseConfirmation(null)}
                 >
-                  Ã—
+                  ×
                 </button>
-                <div className="purchase-modal-icon">â˜•</div>
-                <p className="eyebrow">A LITTLE TREAT FOR YOUR CAFÃ‰</p>
+                <div className="purchase-modal-icon">☕</div>
+                <p className="eyebrow">A LITTLE TREAT FOR YOUR CAFÉ</p>
                 <h2 id="purchase-modal-title">Yay! It's yours!</h2>
                 <p className="purchase-modal-item">
                   {purchaseConfirmation.name}
                 </p>
                 <p className="purchase-modal-message">
-                  Your cafÃ© is getting cozier, one little detail at a time.
+                  Your café is getting cozier, one little detail at a time.
                 </p>
                 <div className="purchase-modal-summary">
                   <div>
                     <span>Beans spent</span>
-                    <strong>ðŸ«˜ âˆ’{purchaseConfirmation.price}</strong>
+                    <strong>🫘 −{purchaseConfirmation.price}</strong>
                   </div>
                   <div>
                     <span>Beans remaining</span>
-                    <strong>ðŸ«˜ {purchaseConfirmation.balance}</strong>
+                    <strong>🫘 {purchaseConfirmation.balance}</strong>
                   </div>
                 </div>
                 <button
@@ -2229,307 +2053,15 @@ function App() {
                   type="button"
                   onClick={() => setPurchaseConfirmation(null)}
                 >
-                  Got it! â™¡
-                </button>
-              </section>
-            </div>
-          )}
-
-          {/* Edit Habit Modal */}
-          {editingHabit && (
-            <div
-              className="purchase-modal-overlay"
-              onClick={() => setEditingHabit(null)}
-            >
-              <section
-                className="purchase-modal"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="edit-habit-modal-title"
-                onClick={(event) => event.stopPropagation()}
-                style={{ textAlign: 'left' }}
-              >
-                <button
-                  className="purchase-modal-close"
-                  type="button"
-                  aria-label="Close edit habit modal"
-                  onClick={() => setEditingHabit(null)}
-                >
-                  Ã—
-                </button>
-                <p className="eyebrow">TWEAK YOUR RITUAL</p>
-                <h2 id="edit-habit-modal-title">Edit habit</h2>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '16px' }}>
-                  <label>
-                    <span style={{ fontSize: '13px', fontWeight: 600, color: '#654b3d' }}>Habit name</span>
-                    <input
-                      value={editHabitName}
-                      onChange={(e) => setEditHabitName(e.target.value)}
-                      placeholder="e.g. Morning stretch"
-                      style={{ width: '100%', marginTop: '4px', padding: '10px 12px', borderRadius: '10px', border: '1px solid #e2dacd', boxSizing: 'border-box' }}
-                    />
-                  </label>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <label>
-                      <span style={{ fontSize: '13px', fontWeight: 600, color: '#654b3d' }}>Icon</span>
-                      <select
-                        value={editHabitIcon}
-                        onChange={(e) => setEditHabitIcon(e.target.value)}
-                        style={{ width: '100%', marginTop: '4px', padding: '10px', borderRadius: '10px', border: '1px solid #e2dacd' }}
-                      >
-                        {habitIcons.map((icon) => (
-                          <option key={icon} value={icon}>{icon}</option>
-                        ))}
-                      </select>
-                    </label>
-                    <label>
-                      <span style={{ fontSize: '13px', fontWeight: 600, color: '#654b3d' }}>Category</span>
-                      <select
-                        value={editHabitCategory}
-                        onChange={(e) => setEditHabitCategory(e.target.value)}
-                        style={{ width: '100%', marginTop: '4px', padding: '10px', borderRadius: '10px', border: '1px solid #e2dacd' }}
-                      >
-                        <option value="General">General</option>
-                        <option value="Health">Health</option>
-                        <option value="Mindfulness">Mindfulness</option>
-                        <option value="Learning">Learning</option>
-                        <option value="Self-care">Self-care</option>
-                      </select>
-                    </label>
-                  </div>
-                  <label>
-                    <span style={{ fontSize: '13px', fontWeight: 600, color: '#654b3d' }}>Frequency</span>
-                    <select
-                      value={editHabitFrequency}
-                      onChange={(e) => setEditHabitFrequency(e.target.value)}
-                      style={{ width: '100%', marginTop: '4px', padding: '10px', borderRadius: '10px', border: '1px solid #e2dacd' }}
-                    >
-                      <option value="daily">Daily</option>
-                      <option value="weekdays">Weekdays</option>
-                      <option value="weekends">Weekends</option>
-                    </select>
-                  </label>
-                  <div style={{ display: 'flex', gap: '10px', marginTop: '12px' }}>
-                    <button
-                      className="primary-button"
-                      type="button"
-                      disabled={savingHabitEdit}
-                      onClick={() => void handleUpdateHabit()}
-                      style={{ flex: 1 }}
-                    >
-                      {savingHabitEdit ? 'Saving...' : 'Save changes âœ¨'}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setEditingHabit(null)}
-                      style={{ padding: '10px 16px', borderRadius: '12px', border: '1px solid #e2dacd', background: '#fdfbf7', cursor: 'pointer' }}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              </section>
-            </div>
-          )}
-
-          {/* Edit Expense Modal */}
-          {editingExpense && (
-            <div
-              className="purchase-modal-overlay"
-              onClick={() => setEditingExpense(null)}
-            >
-              <section
-                className="purchase-modal"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="edit-expense-modal-title"
-                onClick={(event) => event.stopPropagation()}
-                style={{ textAlign: 'left' }}
-              >
-                <button
-                  className="purchase-modal-close"
-                  type="button"
-                  aria-label="Close edit expense modal"
-                  onClick={() => setEditingExpense(null)}
-                >
-                  Ã—
-                </button>
-                <p className="eyebrow">MONEY, ACCURATELY</p>
-                <h2 id="edit-expense-modal-title">Edit spend</h2>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '16px' }}>
-                  <label>
-                    <span style={{ fontSize: '13px', fontWeight: 600, color: '#654b3d' }}>Description</span>
-                    <input
-                      value={editExpenseName}
-                      onChange={(e) => setEditExpenseName(e.target.value)}
-                      placeholder="What did you spend on?"
-                      style={{ width: '100%', marginTop: '4px', padding: '10px 12px', borderRadius: '10px', border: '1px solid #e2dacd', boxSizing: 'border-box' }}
-                    />
-                  </label>
-                  <label>
-                    <span style={{ fontSize: '13px', fontWeight: 600, color: '#654b3d' }}>Amount (â‚¹)</span>
-                    <input
-                      type="number"
-                      min="1"
-                      step="1"
-                      value={editExpenseAmount}
-                      onChange={(e) => setEditExpenseAmount(e.target.value)}
-                      placeholder="Amount"
-                      style={{ width: '100%', marginTop: '4px', padding: '10px 12px', borderRadius: '10px', border: '1px solid #e2dacd', boxSizing: 'border-box' }}
-                    />
-                  </label>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <label>
-                      <span style={{ fontSize: '13px', fontWeight: 600, color: '#654b3d' }}>Category</span>
-                      <select
-                        value={editExpenseCategory}
-                        onChange={(e) => setEditExpenseCategory(e.target.value)}
-                        style={{ width: '100%', marginTop: '4px', padding: '10px', borderRadius: '10px', border: '1px solid #e2dacd' }}
-                      >
-                        {expenseCategories.map((cat) => (
-                          <option key={cat.name} value={cat.name}>{cat.icon} {cat.name}</option>
-                        ))}
-                      </select>
-                    </label>
-                    <label>
-                      <span style={{ fontSize: '13px', fontWeight: 600, color: '#654b3d' }}>Date</span>
-                      <input
-                        type="date"
-                        value={editExpenseDate}
-                        onChange={(e) => setEditExpenseDate(e.target.value)}
-                        style={{ width: '100%', marginTop: '4px', padding: '9px 10px', borderRadius: '10px', border: '1px solid #e2dacd', boxSizing: 'border-box' }}
-                      />
-                    </label>
-                  </div>
-                  <div style={{ display: 'flex', gap: '10px', marginTop: '12px' }}>
-                    <button
-                      className="primary-button"
-                      type="button"
-                      disabled={savingExpenseEdit}
-                      onClick={() => void handleUpdateExpense()}
-                      style={{ flex: 1 }}
-                    >
-                      {savingExpenseEdit ? 'Saving...' : 'Save changes â˜•'}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setEditingExpense(null)}
-                      style={{ padding: '10px 16px', borderRadius: '12px', border: '1px solid #e2dacd', background: '#fdfbf7', cursor: 'pointer' }}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              </section>
-            </div>
-          )}
-
-          {/* Ways to Earn Beans Modal */}
-          {showWaysToEarn && (
-            <div
-              className="purchase-modal-overlay"
-              onClick={() => setShowWaysToEarn(false)}
-            >
-              <section
-                className="purchase-modal"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="ways-to-earn-title"
-                onClick={(event) => event.stopPropagation()}
-                style={{ textAlign: 'left', maxWidth: '480px' }}
-              >
-                <button
-                  className="purchase-modal-close"
-                  type="button"
-                  aria-label="Close ways to earn modal"
-                  onClick={() => setShowWaysToEarn(false)}
-                >
-                  Ã—
-                </button>
-                <div style={{ textAlign: 'center', marginBottom: '14px' }}>
-                  <div className="purchase-modal-icon">ðŸ«˜</div>
-                  <p className="eyebrow">COFFEE BEANS REWARDS</p>
-                  <h2 id="ways-to-earn-title" style={{ margin: '4px 0 8px' }}>Ways to Earn Beans</h2>
-                  <p style={{ margin: 0, fontSize: '14px', color: '#7a614d' }}>
-                    Your authoritative balance: <strong style={{ color: '#4b3626' }}>ðŸ«˜ {beanBalance} beans</strong>
-                  </p>
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '16px' }}>
-                  {/* Activity 1: Daily Journal Mood */}
-                  <div style={{ padding: '12px 14px', background: '#fdfbf7', borderRadius: '12px', border: '1px solid #ead8c5' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <strong style={{ fontSize: '14px' }}>âœ¿ Daily Journal Mood</strong>
-                      <span className="stat-tag" style={{ background: '#e8f3ea', color: '#2b6e3f' }}>+5 beans</span>
-                    </div>
-                    <p style={{ margin: '4px 0 6px', fontSize: '12px', color: '#7a614d' }}>
-                      Check in with your mood once per day in the Daily Journal.
-                    </p>
-                    <span style={{ fontSize: '12px', fontWeight: 600, color: mood ? '#2b6e3f' : '#99735d' }}>
-                      {mood ? 'âœ“ Claimed today (+5 beans earned)' : 'â—‹ Available today â€” log your mood in Daily Journal!'}
-                    </span>
-                  </div>
-
-                  {/* Activity 2: Habit Completion */}
-                  <div style={{ padding: '12px 14px', background: '#fdfbf7', borderRadius: '12px', border: '1px solid #ead8c5' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <strong style={{ fontSize: '14px' }}>ðŸŒ± Habit Completion</strong>
-                      <span className="stat-tag" style={{ background: '#e8f3ea', color: '#2b6e3f' }}>+5 beans</span>
-                    </div>
-                    <p style={{ margin: '4px 0 6px', fontSize: '12px', color: '#7a614d' }}>
-                      Complete an eligible scheduled habit for the day.
-                    </p>
-                    <span style={{ fontSize: '12px', fontWeight: 600, color: '#4b3626' }}>
-                      Status: {completedHabitsCount} of {habits.length} habits completed today
-                    </span>
-                  </div>
-
-                  {/* Activity 3: 7-Day Habit Streak */}
-                  <div style={{ padding: '12px 14px', background: '#fdfbf7', borderRadius: '12px', border: '1px solid #ead8c5' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <strong style={{ fontSize: '14px' }}>ðŸ”¥ 7-Day Habit Streak</strong>
-                      <span className="stat-tag" style={{ background: '#fbf0e4', color: '#b2652b' }}>+10 bonus</span>
-                    </div>
-                    <p style={{ margin: '4px 0 6px', fontSize: '12px', color: '#7a614d' }}>
-                      Reach a 7-day streak milestone on any habit (awarded once per milestone).
-                    </p>
-                    <span style={{ fontSize: '12px', fontWeight: 600, color: '#4b3626' }}>
-                      Best active streak: {habits.reduce((max, h) => Math.max(max, h.currentStreak || 0), 0)} / 7 days
-                    </span>
-                  </div>
-
-                  {/* Activity 4: All Daily Habits Bonus */}
-                  <div style={{ padding: '12px 14px', background: '#fdfbf7', borderRadius: '12px', border: '1px solid #ead8c5' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <strong style={{ fontSize: '14px' }}>â­ All Habits Completed</strong>
-                      <span className="stat-tag" style={{ background: '#fbf0e4', color: '#b2652b' }}>+10 bonus</span>
-                    </div>
-                    <p style={{ margin: '4px 0 6px', fontSize: '12px', color: '#7a614d' }}>
-                      Complete all your scheduled habits for the day.
-                    </p>
-                    <span style={{ fontSize: '12px', fontWeight: 600, color: (completedHabitsCount > 0 && completedHabitsCount === habits.length) ? '#2b6e3f' : '#99735d' }}>
-                      {(completedHabitsCount > 0 && completedHabitsCount === habits.length)
-                        ? 'âœ“ All habits completed for today!'
-                        : `${completedHabitsCount}/${habits.length} completed`}
-                    </span>
-                  </div>
-                </div>
-
-                <button
-                  className="primary-button purchase-modal-button"
-                  type="button"
-                  onClick={() => setShowWaysToEarn(false)}
-                  style={{ marginTop: '16px', width: '100%' }}
-                >
-                  Got it â™¡
+                  Got it! ♡
                 </button>
               </section>
             </div>
           )}
 
           <footer className="page-footer">
-            <span>Made with a little love and a lot of â˜•</span>
-            <span>Remember: progress isn't always linear. â™¡</span>
+            <span>Made with a little love and a lot of ☕</span>
+            <span>Remember: progress isn't always linear. ♡</span>
           </footer>
         </div>
       </main>
@@ -2538,9 +2070,3 @@ function App() {
 }
 
 export default App
-
-
-
-
-
-

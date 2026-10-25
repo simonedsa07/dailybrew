@@ -1,4 +1,4 @@
-﻿import { Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import { AuthRequest } from '../middleware/authenticate';
 import { DailyEntry } from '../models/DailyEntry';
@@ -45,17 +45,15 @@ export async function upsertDailyEntry(req: AuthRequest, res: Response, next: Ne
 
     const data = dailyEntrySchema.parse(req.body);
 
-    const isNewEntry = !(await DailyEntry.exists({ userId: req.userId, date }));
-
     const entry = await DailyEntry.findOneAndUpdate(
       { userId: req.userId, date },
       { $set: data },
       { upsert: true, new: true }
     );
 
-    // Award beans for first daily check-in with a mood
+    // Award beans for first daily check-in with a mood (idempotent via RewardLedger)
     let beansEarned = 0;
-    if (isNewEntry && data.mood) {
+    if (data.mood) {
       beansEarned = await awardCheckInBeans(req.userId!, date);
     }
 

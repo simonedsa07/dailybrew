@@ -34,6 +34,28 @@ export async function upsertBudget(req: AuthRequest, res: Response, next: NextFu
   }
 }
 
+export async function deleteBudget(
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> {
+  try {
+    const month = req.params.month
+
+    if (typeof month !== 'string' || !/^\d{4}-\d{2}$/.test(month)) {
+      return next(createError('Month must be YYYY-MM.', 400))
+    }
+
+    await Budget.findOneAndDelete({
+      userId: req.userId,
+      month,
+    })
+
+    res.json({ success: true, message: 'Monthly budget cleared.' })
+  } catch (err) {
+    next(err)
+  }
+}
 // ---- Savings Goals ----
 
 export async function getSavingsGoals(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
@@ -79,4 +101,5 @@ export async function deleteSavingsGoal(req: AuthRequest, res: Response, next: N
     next(err);
   }
 }
+
 

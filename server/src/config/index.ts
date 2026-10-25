@@ -51,7 +51,8 @@ export const config = {
   // Reward values (server-authoritative)
   rewards: {
     habitCompletion: 5,
-    dailyCheckIn: 3,
+    dailyCheckIn: 5,
     allHabitsBonus: 10,
+    streakMilestone: 10,
   },
 } as const;

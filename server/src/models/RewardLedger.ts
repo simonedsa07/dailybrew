@@ -3,7 +3,8 @@ import mongoose, { Document, Schema } from 'mongoose';
 export type RewardActionType =
   | 'habit_completion'
   | 'daily_checkin'
-  | 'all_habits_bonus';
+  | 'all_habits_bonus'
+  | 'streak_milestone_7';
 
 export interface IRewardLedger extends Document {
   userId: mongoose.Types.ObjectId;
@@ -18,7 +19,7 @@ const rewardLedgerSchema = new Schema<IRewardLedger>(
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true, index: true },
     actionType: {
       type: String,
-      enum: ['habit_completion', 'daily_checkin', 'all_habits_bonus'],
+      enum: ['habit_completion', 'daily_checkin', 'all_habits_bonus', 'streak_milestone_7'],
       required: true,
     },
     referenceId: { type: String, required: true },

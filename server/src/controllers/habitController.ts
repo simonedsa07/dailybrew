@@ -114,7 +114,7 @@ export async function completeHabit(req: AuthRequest, res: Response, next: NextF
     // Award beans — idempotent
     let beansEarned = 0;
     if (isNew) {
-      beansEarned = await awardHabitCompletionBeans(req.userId!, completion._id.toString(), date);
+      beansEarned = await awardHabitCompletionBeans(req.userId!, completion._id.toString(), habit._id.toString(), date);
     }
 
     res.status(201).json({ success: true, data: completion, alreadyCompleted: false, beansEarned });
@@ -168,6 +168,7 @@ export async function getHabitHistory(req: AuthRequest, res: Response, next: Nex
 async function awardHabitCompletionBeans(
   userId: string,
   completionId: string,
+  habitId: string,
   date: string
 ): Promise<number> {
   const session = await mongoose.startSession();
@@ -221,6 +222,36 @@ async function awardHabitCompletionBeans(
           );
           await User.findByIdAndUpdate(userId, { $inc: { beanBalance: bonus } }, { session });
           beansEarned += bonus;
+        }
+      }
+
+      // Check 7-day streak milestone (+10 bonus beans once per habit milestone)
+      const currentHabit = await Habit.findById(habitId).session(session);
+      if (currentHabit) {
+        const habitCompletions = await HabitCompletion.find({
+          userId,
+          habitId: currentHabit._id,
+        }).session(session);
+        const dates = habitCompletions.map((c) => c.completionDate);
+        const streakInfo = calculateStreak(dates, currentHabit.frequency, currentHabit.scheduledDays);
+
+        if (streakInfo.current >= 7) {
+          const streakKey = `habit_streak_7:${currentHabit._id}`;
+          const streakExisting = await RewardLedger.findOne({
+            userId,
+            actionType: 'streak_milestone_7',
+            referenceId: streakKey,
+          }).session(session);
+
+          if (!streakExisting) {
+            const streakBonus = config.rewards.streakMilestone || 10;
+            await RewardLedger.create(
+              [{ userId, actionType: 'streak_milestone_7', referenceId: streakKey, amount: streakBonus }],
+              { session }
+            );
+            await User.findByIdAndUpdate(userId, { $inc: { beanBalance: streakBonus } }, { session });
+            beansEarned += streakBonus;
+          }
         }
       }
     });

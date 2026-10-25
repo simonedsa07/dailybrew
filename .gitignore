@@ -1,13 +1,39 @@
+# Dependencies
 node_modules/
+/.pnp
+.pnp.js
+
+# Build output
 dist/
 build/
+*.tsbuildinfo
+
+# Environment and secrets
 .env
-.env.local
-.env.production
-*.log
-npm-debug.log*
-.DS_Store
-Thumbs.db
+.env.*
+!.env.example
+
+# Test coverage
 coverage/
 .nyc_output/
-*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Backups and temporary patch files
+*.backup
+*.bak
+*.before-*
+*.dailybrew-backup
+*.swp
+*~
+
+# Operating system artifacts
+.DS_Store
+Thumbs.db
