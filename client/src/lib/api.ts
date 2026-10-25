@@ -1,5 +1,4 @@
-const envBase = import.meta.env.VITE_API_BASE_URL
-const API_BASE = envBase ? (envBase.endsWith('/') ? envBase.slice(0, -1) : envBase) : '/api/v1'
+const API_BASE = '/api/v1'
 
 export type ApiResponse<T> = {
   success: boolean
