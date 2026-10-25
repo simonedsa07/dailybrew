@@ -5,6 +5,10 @@ export type ApiResponse<T> = {
   success: boolean
   message?: string
   data?: T
+  beansEarned?: number
+  alreadyCompleted?: boolean
+  newBeanBalance?: number
+  [key: string]: unknown
 }
 
 export async function apiRequest<T>(

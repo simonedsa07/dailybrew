@@ -1262,6 +1262,28 @@ h2 span {
   background: #f9dfd8;
 }
 
+.edit-button {
+  width: 27px;
+  height: 27px;
+  flex-shrink: 0;
+  border: 1px solid #e2dacd;
+  border-radius: 7px;
+  background: #fdfbf7;
+  color: #7a614d;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.edit-button:hover {
+  background: #f2ece1;
+  color: #4b3626;
+  border-color: #cbbead;
+}
+
 .journal-page {
   max-width: 780px;
 }
@@ -1841,7 +1863,7 @@ h2 span {
   text-align: left;
 }
 
-.purchase-modal-summary > div {
+.purchase-modal-summary>div {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1863,16 +1885,29 @@ h2 span {
 }
 
 @keyframes purchase-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes purchase-pop-in {
-  from { opacity: 0; transform: translateY(10px) scale(0.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .purchase-modal-overlay,
   .purchase-modal {
     animation: none;
@@ -1886,16 +1921,19 @@ h2 span {
   padding-top: 8px;
   border-top: 1px solid var(--line);
 }
+
 .cafe-inventory-heading {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
+
 .cafe-inventory-heading .section-subtitle {
   margin-top: 14px;
   margin-bottom: 5px;
 }
+
 .cafe-inventory-count {
   flex-shrink: 0;
   padding: 6px 10px;
@@ -1906,6 +1944,7 @@ h2 span {
   font-size: 10px;
   font-weight: 800;
 }
+
 .cafe-inventory-empty {
   display: flex;
   flex-direction: column;
@@ -1917,21 +1956,25 @@ h2 span {
   background: #fffaf4;
   text-align: center;
 }
-.cafe-inventory-empty > span {
+
+.cafe-inventory-empty>span {
   font-size: 29px;
 }
+
 .cafe-inventory-empty p,
 .cafe-inventory-empty small {
   margin: 0;
   color: #987e67;
   font-size: 11px;
 }
+
 .cafe-inventory-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
   margin-top: 12px;
 }
+
 .cafe-inventory-item {
   display: flex;
   align-items: center;
@@ -1942,40 +1985,48 @@ h2 span {
   border-radius: 10px;
   background: #fffaf3;
 }
+
 .cafe-inventory-icon {
   flex-shrink: 0;
   font-size: 25px;
 }
+
 .cafe-inventory-details {
   flex: 1;
   min-width: 0;
 }
+
 .cafe-inventory-details strong,
 .cafe-inventory-details small {
   display: block;
   overflow-wrap: anywhere;
 }
+
 .cafe-inventory-details strong {
   color: #66503d;
   font-size: 11px;
 }
+
 .cafe-inventory-details small {
   margin-top: 4px;
   color: #a18a73;
   font-size: 9px;
   text-transform: capitalize;
 }
+
 .cafe-inventory-quantity {
   flex-shrink: 0;
   color: #8b7053;
   font-size: 11px;
   font-weight: 800;
 }
+
 .cafe-inventory-hint {
   margin-top: 12px;
   color: #9b866f;
   font-size: 10px;
 }
+
 @media (max-width: 760px) {
   .cafe-inventory-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2313,4 +2364,16 @@ h2 span {
   font-size: 11px;
   font-weight: 700;
   color: #8c684d;
+}
+
+.sidebar-settings-button {
+  flex-shrink: 0;
+  margin-top: 10px;
+  width: 100%;
+}
+
+@media (min-width: 761px) {
+  .sidebar-settings-button {
+    margin-top: auto;
+  }
 }
