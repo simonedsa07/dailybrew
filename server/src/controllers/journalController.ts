@@ -19,7 +19,7 @@ export async function getDailyEntries(req: AuthRequest, res: Response, next: Nex
       if (endDate) (query.date as Record<string, unknown>).$lte = endDate;
     }
 
-    const entries = await DailyEntry.find(query).sort({ date: -1 }).limit(90);
+    const entries = await DailyEntry.find(query).sort({ date: -1, createdAt: -1 }).limit(90);
     res.json({ success: true, data: entries });
   } catch (err) {
     next(err);
@@ -31,8 +31,23 @@ export async function getDailyEntry(req: AuthRequest, res: Response, next: NextF
     const date = req.params.date;
     if (typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return next(createError('Date must be YYYY-MM-DD.', 400));
 
-    const entry = await DailyEntry.findOne({ userId: req.userId, date });
+    const entry = await DailyEntry.findOne({ userId: req.userId, date }).sort({ createdAt: -1 });
     res.json({ success: true, data: entry || null });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function createDailyEntry(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const date = req.params.date;
+    if (typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return next(createError('Date must be YYYY-MM-DD.', 400));
+
+    const data = dailyEntrySchema.parse(req.body);
+    const entry = await DailyEntry.create({ ...data, userId: req.userId, date });
+    const beansEarned = await awardEligibleCheckIn(req.userId!, date, data);
+
+    res.status(201).json({ success: true, data: entry, beansEarned });
   } catch (err) {
     next(err);
   }
@@ -51,16 +66,21 @@ export async function upsertDailyEntry(req: AuthRequest, res: Response, next: Ne
       { upsert: true, new: true }
     );
 
-    // Award beans for first daily check-in with a mood (idempotent via RewardLedger)
-    let beansEarned = 0;
-    if (data.mood) {
-      beansEarned = await awardCheckInBeans(req.userId!, date);
-    }
+    const beansEarned = await awardEligibleCheckIn(req.userId!, date, data);
 
     res.json({ success: true, data: entry, beansEarned });
   } catch (err) {
     next(err);
   }
+}
+
+async function awardEligibleCheckIn(
+  userId: string,
+  date: string,
+  data: { mood?: string; note?: string; gratitude?: string }
+): Promise<number> {
+  if (!data.mood && !data.note?.trim() && !data.gratitude?.trim()) return 0;
+  return awardCheckInBeans(userId, date);
 }
 
 async function awardCheckInBeans(userId: string, date: string): Promise<number> {
@@ -90,4 +110,3 @@ async function awardCheckInBeans(userId: string, date: string): Promise<number> 
   }
   return beans;
 }
-

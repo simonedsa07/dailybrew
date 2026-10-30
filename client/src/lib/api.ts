@@ -4,6 +4,7 @@ export type ApiResponse<T> = {
   success: boolean
   message?: string
   data?: T
+  beansEarned?: number
 }
 
 export async function apiRequest<T>(

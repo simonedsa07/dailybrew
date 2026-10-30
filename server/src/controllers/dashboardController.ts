@@ -32,7 +32,7 @@ export async function getDashboardSummary(req: AuthRequest, res: Response, next:
         transactionDate: { $gte: monthStart, $lte: monthEnd },
       }),
       Budget.findOne({ userId: req.userId, month }),
-      DailyEntry.findOne({ userId: req.userId, date: today }),
+      DailyEntry.findOne({ userId: req.userId, date: today }).sort({ createdAt: -1 }),
     ]);
 
     if (!user) return next(createError('User not found.', 404));

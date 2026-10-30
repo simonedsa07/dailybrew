@@ -28,7 +28,6 @@ const dailyEntrySchema = new Schema<IDailyEntry>(
   { timestamps: true }
 );
 
-// One entry per user per date
-dailyEntrySchema.index({ userId: 1, date: 1 }, { unique: true });
+dailyEntrySchema.index({ userId: 1, date: -1, createdAt: -1 });
 
 export const DailyEntry = mongoose.model<IDailyEntry>('DailyEntry', dailyEntrySchema);

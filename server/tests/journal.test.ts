@@ -5,6 +5,7 @@ import { connectTestDB, closeTestDB } from './testDb';
 import { User } from '../src/models/User';
 import { DailyEntry } from '../src/models/DailyEntry';
 import { RewardLedger } from '../src/models/RewardLedger';
+import { migrateDailyEntryIndexes } from '../src/config/database';
 
 beforeAll(async () => {
   await connectTestDB();
@@ -84,6 +85,61 @@ describe('Daily Journal Rewards and Persistence', () => {
     expect(res2.body.beansEarned).toBe(0);
 
     // Verify balance was only incremented once
+    const meRes = await request(app).get('/api/v1/auth/me').set('Cookie', cookie);
+    expect(meRes.body.data.beanBalance).toBe(5);
+  });
+
+  it('awards beans for a journal note even when no mood is selected', async () => {
+    const cookie = await registerAndLogin();
+    const today = new Date().toISOString().slice(0, 10);
+
+    const res = await request(app)
+      .put(`/api/v1/daily-entries/${today}`)
+      .set('Cookie', cookie)
+      .send({ note: 'Writing a little about today.' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.beansEarned).toBe(5);
+
+    const meRes = await request(app).get('/api/v1/auth/me').set('Cookie', cookie);
+    expect(meRes.body.data.beanBalance).toBe(5);
+  });
+
+  it('saves more than four submissions as separate entries on the same day', async () => {
+    const cookie = await registerAndLogin();
+    const today = new Date().toISOString().slice(0, 10);
+
+    await DailyEntry.collection.createIndex(
+      { userId: 1, date: 1 },
+      { unique: true, name: 'legacy_userId_1_date_1' }
+    );
+    await migrateDailyEntryIndexes();
+
+    const responses = [];
+    for (let index = 1; index <= 5; index++) {
+      responses.push(
+        await request(app)
+          .post(`/api/v1/daily-entries/${today}`)
+          .set('Cookie', cookie)
+          .send({ note: `Journal entry ${index}` })
+      );
+    }
+
+    expect(responses.map((response) => response.status)).toEqual([201, 201, 201, 201, 201]);
+    expect(responses.map((response) => response.body.beansEarned)).toEqual([5, 0, 0, 0, 0]);
+
+    const entriesRes = await request(app).get('/api/v1/daily-entries').set('Cookie', cookie);
+    expect(entriesRes.body.data).toHaveLength(5);
+    expect(entriesRes.body.data.map((entry: { note: string }) => entry.note)).toEqual(
+      expect.arrayContaining([
+        'Journal entry 1',
+        'Journal entry 2',
+        'Journal entry 3',
+        'Journal entry 4',
+        'Journal entry 5',
+      ])
+    );
+
     const meRes = await request(app).get('/api/v1/auth/me').set('Cookie', cookie);
     expect(meRes.body.data.beanBalance).toBe(5);
   });

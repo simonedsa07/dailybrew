@@ -61,6 +61,7 @@ type DailyJournalEntry = {
   note?: string
   gratitude?: string
   waterIntake?: number
+  createdAt?: string
 }
 
 type AuthUser = {
@@ -616,18 +617,15 @@ function App() {
   async function handleSaveJournal() {
     const today = getTodayString()
     try {
-      const res = await apiRequest<{
-        data: DailyJournalEntry
-        beansEarned?: number
-      }>(`/daily-entries/${today}`, {
-        method: 'PUT',
+      const res = await apiRequest<DailyJournalEntry>(`/daily-entries/${today}`, {
+        method: 'POST',
         body: JSON.stringify({
           mood: mood ? mood.toLowerCase() : undefined,
           note: journal,
           waterIntake: water,
         }),
       })
-      const earned = res.data?.beansEarned ?? 0
+      const earned = res.beansEarned ?? 0
       if (earned > 0) {
         setBeanBalance((prev) => prev + earned)
         setNotice(
@@ -1160,7 +1158,7 @@ function App() {
                     className="primary-button full-button"
                     onClick={() => void handleSaveJournal()}
                   >
-                    Save my check-in ♡ (+3 beans)
+                    Save my check-in ♡ (+5 beans on your first journal check-in each day)
                   </button>
                 </article>
 
@@ -1499,7 +1497,7 @@ function App() {
               <p className="eyebrow">A SOFT PLACE TO LAND</p>
               <h2>Dear little diary... ✿</h2>
               <p className="panel-description">
-                You don't have to make sense of everything. Just start wherever you are. (+3 beans awarded on your first daily check-in!)
+                You don't have to make sense of everything. Just start wherever you are. (+5 beans for your first journal check-in each day.)
               </p>
 
               {journalLoading && (
@@ -1555,10 +1553,10 @@ function App() {
                 <div style={{ marginTop: '30px' }}>
                   <h3 className="section-subtitle">Past journal entries</h3>
                   <div className="journal-history-list">
-                    {pastEntries.slice(0, 5).map((entry) => (
+                    {pastEntries.map((entry) => (
                       <article className="journal-history-card" key={entry._id || entry.date}>
                         <div className="journal-history-header">
-                          <span>📅 {entry.date}</span>
+                          <span>📅 {entry.date}{entry.createdAt ? ` · ${new Date(entry.createdAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}` : ''}</span>
                           <span>{entry.mood ? `Feeling ${entry.mood} ♡` : ''} · 💧 {entry.waterIntake ?? 0} glasses</span>
                         </div>
                         {entry.note ? <p style={{ fontSize: '12px', color: 'var(--ink)', margin: 0, whiteSpace: 'pre-wrap' }}>{entry.note}</p> : <small style={{ color: '#a28b75' }}>No note written</small>}
